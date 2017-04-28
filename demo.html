@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>获取 SVG 信息</title>
+	<link rel="stylesheet" href="contents/css/reset-1.3.3.css">
+	<link rel="stylesheet" href="contents/css/layout.css">
+</head>
+<body>
+	
+	<header>
+		<h1>S.T.O</h1>
+		<button id="gen-info">Go</button>
+	</header>
+
+	<div class="input-area-mod">
+		<textarea id="input-svg-box">输入你的SVG代码</textarea>
+		<textarea id="output-svg-box" disabled=""></textarea>
+	</div>
+
+	<p></p>
+	
+	<div id="display-box"></div>
+
+	<script src="contents/js/svgInfo.js"></script>
+	<script type="text/javascript">
+
+		document.getElementById('gen-info').addEventListener('click', createIframe, false);
+
+		
+	</script>
+</body>
+</html>

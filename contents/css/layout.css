@@ -1,0 +1,51 @@
+@charset "utf8";
+
+header {
+	display: flex;
+	padding: 0 20px;
+	height: 10vh;
+	align-items: center;
+	justify-content: space-between;
+}
+header h1 {
+	font-size: 24px;
+}
+
+.input-area-mod {
+	height: 85vh;
+	font-size: 0;
+	border-width: 1px 0;
+	border-color: #eee;
+	border-style: solid;
+}
+
+.input-area-mod textarea {
+	width: 50%;
+	height: 100%;
+	border: none;
+	box-sizing: border-box;
+	font-size: 14px;
+	outline: none;
+	padding: 10px;
+	resize: none;
+}
+
+.input-area-mod textarea[disabled] {
+	background: #f5f5f5;
+}
+
+#gen-info {
+	width: 100px;
+	line-height: 32px;
+	border-radius: 32px;
+	background: #09f;
+	color: #fff;
+	font-size: 14px;
+	float: right;
+	border: none;
+	outline: none;
+}
+
+#svgbox {
+	display: none;
+}
