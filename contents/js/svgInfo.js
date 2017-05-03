@@ -1,19 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-	let intSvgBox = document.getElementById('input-svg-box');
-	
-	intSvgBox.addEventListener('focus', function() {
-		if (this.value === '输入你的SVG代码') {
-			this.value = '';
-		}
-	});
-
-	intSvgBox.addEventListener('blur', function() {
-		if (this.value === '') {
-			this.value = '输入你的SVG代码';
-		}
-	});
-});
-
 
 function createIframe() {
 	let svgBox = document.createElement('div');
@@ -39,6 +23,8 @@ function SvgInfo(evt) {
 	let svg = document.querySelector('svg');
 	let result = [];
 
+	if (!svg) return result;
+
 	let bBox = svg.getBBox();
 	let svgChild = svg.children;
 	let svgChildLength = svgChild.length;
@@ -54,7 +40,8 @@ function SvgInfo(evt) {
 				y: childInfo.y,
 				width: childInfo.width,
 				height: childInfo.height,
-				map: svgChild[i].getAttribute('d')
+				type: 'path',
+				d: svgChild[i].getAttribute('d')
 			};
 
 			if ( name )
