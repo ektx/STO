@@ -23,33 +23,55 @@ function SvgInfo(evt) {
 	let svg = document.querySelector('svg');
 	let result = [];
 
+	let clearData = function( data ) {
+		return data.replace(/\n|\t/g, '')
+	}
+
+	let getTypeVal = function( json ) {
+
+		let _result = [];
+
+		for (var i = 0, l = json.length; i < l; i++ ) {
+
+			let childInfo = json[i].getBBox();
+			let name = json[i].id || '';
+
+			let _data = {
+				name: name,
+				type : json[i].tagName
+			};
+
+			switch ( json[i].tagName ) {
+				case 'path':
+					_data.d = clearData( json[i].getAttribute('d') );
+					_data.x = childInfo.x;
+					_data.y = childInfo.y;
+					_data.width  = childInfo.width;
+					_data.height = childInfo.height;
+					break;
+
+				case 'polygon':
+					_data.points = clearData( json[i].getAttribute('points') );
+					break;
+			}
+
+			if ( json[i].children.length > 0) {
+				_data.children = getTypeVal( json[i].children )
+			}
+
+			_result.push( _data )
+
+		}
+
+		return _result
+	}
+
 	if (!svg) return result;
 
 	let bBox = svg.getBBox();
 	let svgChild = svg.children;
-	let svgChildLength = svgChild.length;
 
-	for (var i = 0; i < svgChildLength; i++ ) {
-
-		if (svgChild[i].tagName === 'path') {
-
-			let childInfo = svgChild[i].getBBox();
-			let name = svgChild[i].id || false;
-			let data = {
-				x: childInfo.x,
-				y: childInfo.y,
-				width: childInfo.width,
-				height: childInfo.height,
-				type: 'path',
-				d: svgChild[i].getAttribute('d')
-			};
-
-			if ( name )
-				data.name = name
-
-			result.push( data )
-		}
-	}
+	result = getTypeVal( svgChild );
 
 	return result;
 }

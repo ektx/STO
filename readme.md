@@ -6,7 +6,7 @@ SVG to Object
 
 ### 说明
 目前支持属性有:
-`path` 将 svg path 转换成对应的代码
+`path` `polygon` 对其进行整理输出
 
 示例: 将以下代码复制到左侧的文本框
 ```html
