@@ -1,5 +1,6 @@
 
 function createIframe() {
+	let oldSVG = document.getElementById('svgbox');
 	let svgBox = document.createElement('div');
 	let inner  = document.getElementById('input-svg-box');
 	let svgVal = inner.value;
@@ -9,9 +10,10 @@ function createIframe() {
 		return;
 	}
 
+	if (oldSVG) oldSVG.remove();
+
 	svgBox.id = 'svgbox';
 	svgBox.innerHTML = inner.value;
-
 
 	document.body.appendChild( svgBox );
 
