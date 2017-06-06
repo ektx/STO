@@ -35,33 +35,37 @@ function SvgInfo(evt) {
 
 		for (var i = 0, l = json.length; i < l; i++ ) {
 
-			let childInfo = json[i].getBBox();
-			let name = json[i].id || '';
+			// 过滤 title 标签
+			if (json[i].tagName !== 'title') {
 
-			let _data = {
-				name: name,
-				type : json[i].tagName
-			};
+				let childInfo = json[i].getBBox();
+				let name = json[i].id || '';
 
-			switch ( json[i].tagName ) {
-				case 'path':
-					_data.d = clearData( json[i].getAttribute('d') );
-					_data.x = childInfo.x;
-					_data.y = childInfo.y;
-					_data.width  = childInfo.width;
-					_data.height = childInfo.height;
-					break;
+				let _data = {
+					name: name,
+					type : json[i].tagName
+				};
 
-				case 'polygon':
-					_data.points = clearData( json[i].getAttribute('points') );
-					break;
+				switch ( json[i].tagName ) {
+					case 'path':
+						_data.d = clearData( json[i].getAttribute('d') );
+						_data.x = childInfo.x;
+						_data.y = childInfo.y;
+						_data.width  = childInfo.width;
+						_data.height = childInfo.height;
+						break;
+
+					case 'polygon':
+						_data.points = clearData( json[i].getAttribute('points') );
+						break;
+				}
+
+				if ( json[i].children.length > 0) {
+					_data.children = getTypeVal( json[i].children )
+				}
+
+				_result.push( _data )
 			}
-
-			if ( json[i].children.length > 0) {
-				_data.children = getTypeVal( json[i].children )
-			}
-
-			_result.push( _data )
 
 		}
 
