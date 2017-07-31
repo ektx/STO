@@ -25,14 +25,24 @@ function SvgInfo(ele) {
 
 			let _data = {};
 			let _ = json[i];
+			let childInfo = '';
 
 			_data.tagName = _.tagName;
 
 			if ( _.id ) _data.id = _.id;
 
+			if (json[i].getBBox) {
+				childInfo = json[i].getBBox();
+			}
+
+			if (!childInfo) {
+				childInfo = _.getBoundingClientRect();
+			}
+
+
 			switch ( _.tagName ) {
 				case 'path':
-					let childInfo = json[i].getBBox();
+
 					_data.d = clearData( json[i].getAttribute('d') );
 					_data.x = childInfo.x;
 					_data.y = childInfo.y;
@@ -42,6 +52,17 @@ function SvgInfo(ele) {
 
 				case 'polygon':
 					_data.points = clearData( json[i].getAttribute('points') );
+					break;
+
+				case 'g':
+					_data.x = childInfo.left;
+					_data.y = childInfo.top;
+					_data.width = childInfo.width;
+					_data.height = childInfo.height;
+
+					break;
+
+				default:
 					break;
 			}
 

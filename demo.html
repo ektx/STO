@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="contents/css/layout.css">
 </head>
 <body>
+	<div id="display-box"></div>
 	
 	<header>
 		<h1>S.T.O</h1>
@@ -20,7 +21,6 @@
 
 	<p></p>
 	
-	<div id="display-box"></div>
 
 	<script src="contents/js/svgInfo.js"></script>
 	<script type="text/javascript">
@@ -44,7 +44,7 @@
 			// 保存目前使用的数据
 			localStorage.svg = svgVal;
 
-			document.body.appendChild( svgBox );
+			document.getElementById('display-box').appendChild( svgBox );
 
 			document.getElementById('output-svg-box').value = JSON.stringify( SvgInfo('svg'), '', '\t' )
 		}
