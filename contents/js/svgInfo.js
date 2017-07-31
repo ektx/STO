@@ -1,28 +1,16 @@
+/*
+	获取 SVG 内部元素的信息并以 json 的格式输出
+	-----------------------------------------
 
-function createIframe() {
-	let oldSVG = document.getElementById('svgbox');
-	let svgBox = document.createElement('div');
-	let inner  = document.getElementById('input-svg-box');
-	let svgVal = inner.value;
+*/
 
-	if ( svgVal === '输入你的SVG代码' ) {
-		inner.focus();
-		return;
-	}
 
-	if (oldSVG) oldSVG.remove();
+/*
+	@ele 指定的svg元素
+*/
+function SvgInfo(ele) {
 
-	svgBox.id = 'svgbox';
-	svgBox.innerHTML = inner.value;
-
-	document.body.appendChild( svgBox );
-
-	document.getElementById('output-svg-box').value = JSON.stringify( SvgInfo(), '', '\t' )
-}
-
-function SvgInfo(evt) {
-
-	let svg = document.querySelector('svg');
+	let svg = document.querySelector(ele);
 	let result = [];
 
 	let clearData = function( data ) {
@@ -34,11 +22,6 @@ function SvgInfo(evt) {
 		let _result = [];
 
 		for (var i = 0, l = json.length; i < l; i++ ) {
-
-			// 过滤 title 标签
-			// if ( ['path','polygon'].includes(json[i].tagName) ) {
-
-			// 	
 
 			let _data = {};
 			let _ = json[i];
@@ -76,7 +59,6 @@ function SvgInfo(evt) {
 
 	if (!svg) return result;
 
-	let bBox = svg.getBBox();
 	let svgChild = svg.children;
 
 	result = getTypeVal( svgChild );
