@@ -36,36 +36,38 @@ function SvgInfo(evt) {
 		for (var i = 0, l = json.length; i < l; i++ ) {
 
 			// 过滤 title 标签
-			if (json[i].tagName !== 'title') {
+			// if ( ['path','polygon'].includes(json[i].tagName) ) {
 
-				let childInfo = json[i].getBBox();
-				let name = json[i].id || '';
+			// 	
 
-				let _data = {
-					name: name,
-					type : json[i].tagName
-				};
+			let _data = {};
+			let _ = json[i];
 
-				switch ( json[i].tagName ) {
-					case 'path':
-						_data.d = clearData( json[i].getAttribute('d') );
-						_data.x = childInfo.x;
-						_data.y = childInfo.y;
-						_data.width  = childInfo.width;
-						_data.height = childInfo.height;
-						break;
+			_data.tagName = _.tagName;
 
-					case 'polygon':
-						_data.points = clearData( json[i].getAttribute('points') );
-						break;
-				}
+			if ( _.id ) _data.id = _.id;
 
-				if ( json[i].children.length > 0) {
-					_data.children = getTypeVal( json[i].children )
-				}
+			switch ( _.tagName ) {
+				case 'path':
+					let childInfo = json[i].getBBox();
+					_data.d = clearData( json[i].getAttribute('d') );
+					_data.x = childInfo.x;
+					_data.y = childInfo.y;
+					_data.width  = childInfo.width;
+					_data.height = childInfo.height;
+					break;
 
-				_result.push( _data )
+				case 'polygon':
+					_data.points = clearData( json[i].getAttribute('points') );
+					break;
 			}
+
+			if ( json[i].children.length ) {
+				_data.children = getTypeVal( json[i].children )
+			}
+
+			// 保存数据
+			_result.push( _data )
 
 		}
 
