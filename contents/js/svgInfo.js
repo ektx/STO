@@ -1,28 +1,16 @@
+/*
+	获取 SVG 内部元素的信息并以 json 的格式输出
+	-----------------------------------------
 
-function createIframe() {
-	let oldSVG = document.getElementById('svgbox');
-	let svgBox = document.createElement('div');
-	let inner  = document.getElementById('input-svg-box');
-	let svgVal = inner.value;
+*/
 
-	if ( svgVal === '输入你的SVG代码' ) {
-		inner.focus();
-		return;
-	}
 
-	if (oldSVG) oldSVG.remove();
+/*
+	@ele 指定的svg元素
+*/
+function SvgInfo(ele) {
 
-	svgBox.id = 'svgbox';
-	svgBox.innerHTML = inner.value;
-
-	document.body.appendChild( svgBox );
-
-	document.getElementById('output-svg-box').value = JSON.stringify( SvgInfo(), '', '\t' )
-}
-
-function SvgInfo(evt) {
-
-	let svg = document.querySelector('svg');
+	let svg = document.querySelector(ele);
 	let result = [];
 
 	let clearData = function( data ) {
@@ -35,37 +23,34 @@ function SvgInfo(evt) {
 
 		for (var i = 0, l = json.length; i < l; i++ ) {
 
-			// 过滤 title 标签
-			if (json[i].tagName !== 'title') {
+			let _data = {};
+			let _ = json[i];
 
-				let childInfo = json[i].getBBox();
-				let name = json[i].id || '';
+			_data.tagName = _.tagName;
 
-				let _data = {
-					name: name,
-					type : json[i].tagName
-				};
+			if ( _.id ) _data.id = _.id;
 
-				switch ( json[i].tagName ) {
-					case 'path':
-						_data.d = clearData( json[i].getAttribute('d') );
-						_data.x = childInfo.x;
-						_data.y = childInfo.y;
-						_data.width  = childInfo.width;
-						_data.height = childInfo.height;
-						break;
+			switch ( _.tagName ) {
+				case 'path':
+					let childInfo = json[i].getBBox();
+					_data.d = clearData( json[i].getAttribute('d') );
+					_data.x = childInfo.x;
+					_data.y = childInfo.y;
+					_data.width  = childInfo.width;
+					_data.height = childInfo.height;
+					break;
 
-					case 'polygon':
-						_data.points = clearData( json[i].getAttribute('points') );
-						break;
-				}
-
-				if ( json[i].children.length > 0) {
-					_data.children = getTypeVal( json[i].children )
-				}
-
-				_result.push( _data )
+				case 'polygon':
+					_data.points = clearData( json[i].getAttribute('points') );
+					break;
 			}
+
+			if ( json[i].children.length ) {
+				_data.children = getTypeVal( json[i].children )
+			}
+
+			// 保存数据
+			_result.push( _data )
 
 		}
 
@@ -74,7 +59,6 @@ function SvgInfo(evt) {
 
 	if (!svg) return result;
 
-	let bBox = svg.getBBox();
 	let svgChild = svg.children;
 
 	result = getTypeVal( svgChild );
