@@ -52,3 +52,15 @@ header h1 {
 	opacity: 0;
 	overflow: hidden;
 }
+
+footer {
+	height: 5vh;
+	padding: 0 10px;
+	line-height: 5vh;
+}
+footer label {
+	display: inline-block;
+}
+footer label input {
+	margin: 0 5px 0 0;
+}
