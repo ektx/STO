@@ -60,6 +60,8 @@ function forCMapFun ( json ) {
 			if (typeof val.points === 'string') {
 				let arr = val.points.replace(/\s/g, ',').split(',');
 
+				arr.pop();
+
 				arr.forEach( (_v, i) => {
 					arr[i] =  Number(_v)
 				})

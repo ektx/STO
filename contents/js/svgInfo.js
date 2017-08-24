@@ -24,7 +24,7 @@ function SvgInfo(ele, pathToPolygon) {
 
 		let _result = [];
 
-		for (var i = 0, l = json.length; i < l; i++ ) {
+		for (let i = 0, l = json.length; i < l; i++ ) {
 
 			let _data = {};
 			let _ = json[i];
