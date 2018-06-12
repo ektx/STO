@@ -6,7 +6,6 @@
 	@pathToPolygon 是否使用 path 转换成 polygon
 */
 function SvgInfo(ele, pathToPolygon) {
-
 	let svg = document.querySelector(ele);
 	let result = [];
 
@@ -17,43 +16,32 @@ function SvgInfo(ele, pathToPolygon) {
 			data = data.replace(/\n|\t/g, '')
 		}
 
-		return data;
+		return data
 	}
 
 	let getTypeVal = function( json ) {
+		let _result = []
+		let _l = json.length
 
-		let _result = [];
-
-		for (let i = 0, l = json.length; i < l; i++ ) {
-
-			let _data = {};
-			let _ = json[i];
-			let childInfo = '';
-
-			_data.tagName = _.tagName;
-
-			if ( _.id ) _data.id = _.id;
-
-			if (json[i].getBBox) {
-				childInfo = json[i].getBBox();
+		for (let i = 0; i < _l; i++) {
+			let _ = json[i]
+			let _data = {
+				tagName: _.tagName
 			}
 
-			if (!childInfo) {
-				childInfo = _.getBoundingClientRect();
-			}
+			if ( _.id ) _data.id = _.id
+
+			let childInfo = _.getBBox ? _.getBBox() : _.getBoundingClientRect()
 
 
 			switch ( _.tagName ) {
 				case 'path':
-
 					if (pathToPolygon) {
-
 						_data.points = clearData( pathToPoints( _.pathSegList ) )
 
-						_data.tagName = 'polygon';
-
+						_data.tagName = 'polygon'
 					} else {
-						_data.d = clearData( json[i].getAttribute('d') );
+						_data.d = clearData( _.getAttribute('d') )
 						_data.x = childInfo.x;
 						_data.y = childInfo.y;
 						_data.width  = childInfo.width;
@@ -62,7 +50,7 @@ function SvgInfo(ele, pathToPolygon) {
 					break;
 
 				case 'polygon':
-					_data.points = clearData( json[i].getAttribute('points') );
+					_data.points = clearData( _.getAttribute('points') )
 					break;
 
 				case 'g':
@@ -77,8 +65,15 @@ function SvgInfo(ele, pathToPolygon) {
 					break;
 			}
 
-			if ( json[i].children.length ) {
-				_data.children = getTypeVal( json[i].children )
+			if ( _.children.length ) {
+				_data.children = getTypeVal( _.children )
+			}
+
+			if ( _.hasAttribute('transform') ) {
+				let { x, y } = getTranslate(_)
+				_data.points = _data.points.map((val, i) => {
+					return (i%2 ? val + y : val + x)
+				})
 			}
 
 			// 保存数据
@@ -89,13 +84,10 @@ function SvgInfo(ele, pathToPolygon) {
 		return _result
 	}
 
-	if (!svg) return result;
+	if (!svg) return result
 
-	let svgChild = svg.children;
+	return getTypeVal( svg.children )
 
-	result = getTypeVal( svgChild );
-
-	return result;
 }
 
 
@@ -162,4 +154,14 @@ function pathToPoints(segments) {
         result.push(x, y);
     }
     return result;
+}
+
+function getTranslate (ele) {
+	let style = window.getComputedStyle(ele)
+	let martrix = new WebKitCSSMatrix(style.transform)
+
+	return {
+		x: martrix.m41,
+		y: martrix.m42
+	}
 }
